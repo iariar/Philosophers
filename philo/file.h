@@ -6,7 +6,7 @@
 /*   By: iariss <iariss@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 15:47:13 by iariss            #+#    #+#             */
-/*   Updated: 2021/06/16 11:35:56 by iariss           ###   ########.fr       */
+/*   Updated: 2021/07/26 10:42:58 by iariss           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_vars
 	pthread_mutex_t	*fork;
 	pthread_mutex_t	gnrl_lock;
 	pthread_mutex_t	death_lock;
-	pthread_mutex_t	dead_lock;
+	pthread_mutex_t	print_lock;
 	pthread_mutex_t	end_lock;
 	pthread_mutex_t	eating;
 	struct timeval	time;

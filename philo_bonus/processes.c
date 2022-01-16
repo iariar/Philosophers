@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   threads.c                                          :+:      :+:    :+:   */
+/*   processes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iariss <iariss@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/14 12:09:53 by iariss            #+#    #+#             */
-/*   Updated: 2021/06/16 20:46:43 by iariss           ###   ########.fr       */
+/*   Updated: 2021/09/11 16:56:32 by iariss           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ void	lock_print(char *s, t_costum *costum)
 {
 	int	diff;
 
-	sem_wait(costum->vars->dead_lock);
+	sem_wait(costum->vars->print_lock);
 	diff = currenttime() - costum->vars->start;
 	printf(s, diff, costum->index);
-	sem_post(costum->vars->dead_lock);
+	sem_post(costum->vars->print_lock);
 }
 
 void	philo_life(t_costum *costum)
@@ -42,14 +42,13 @@ void	philo_life(t_costum *costum)
 		sem_wait(costum->vars->fork);
 		lock_print("%ld philosopher %d has taken a fork\n", costum);
 		lock_print("%ld philosopher %d is eating\n", costum);
+		costum->time_limit = currenttime() + costum->vars->time_to_die;
+		usleep(costum->vars->time_to_eat * 1000);
 		n++;
 		if (n == costum->vars->num_times_eat)
 			sem_post(costum->vars->times_eat);
-		costum->time_limit = currenttime() + costum->vars->time_to_die;
-		usleep(costum->vars->time_to_eat * 1000);
 		sem_post(costum->vars->fork);
 		sem_post(costum->vars->fork);
-		sem_post(costum->vars->eating);
 		lock_print("%ld philosopher %d is sleeping\n", costum);
 		usleep(costum->vars->time_to_sleep * 1000);
 		lock_print("%ld philosopher %d is thinking\n", costum);
@@ -65,8 +64,9 @@ void	*death_checker(void *var)
 	{
 		if (currenttime() > costum->time_limit)
 		{
-			sem_wait(costum->vars->dead_lock);
-			printf("%d died \n", costum->index);
+			sem_wait(costum->vars->print_lock);
+			printf("%ld philosopher %d died \n",
+				currenttime() - costum->vars->start, costum->index);
 			sem_post(costum->vars->gnrl_lock);
 			exit(0);
 			return (NULL);

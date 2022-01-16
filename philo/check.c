@@ -6,7 +6,7 @@
 /*   By: iariss <iariss@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/14 12:01:52 by iariss            #+#    #+#             */
-/*   Updated: 2021/06/16 11:33:16 by iariss           ###   ########.fr       */
+/*   Updated: 2021/09/07 12:15:53 by iariss           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	varso(int i, char **v, t_vars *vars)
 {
-	vars->num_of_philos = ft_atoi(v[1]);
 	vars->num_of_philos = ft_atoi(v[1]);
 	vars->time_to_die = ft_atoi(v[2]);
 	vars->time_to_eat = ft_atoi(v[3]);
@@ -27,9 +26,14 @@ void	varso(int i, char **v, t_vars *vars)
 
 int	num_check(char **v, int i)
 {
-	if (v[i][0] == '-' || (v[i][0] == '0' && ft_strlen(v[i]) == 1))
+	if (ft_atoi(v[i]) == 0)
 	{
-		print_error("Error\nNegative Number Or Zero\n");
+		print_error("Error\nArgument Should not be zero\n");
+		return (0);
+	}
+	if (ft_atoi(v[i]) < 0)
+	{
+		print_error("Error\nArgument Should not be Negative\n");
 		return (0);
 	}
 	return (1);
@@ -44,12 +48,11 @@ int	check_arguments(char **v, t_vars *vars)
 	j = 0;
 	while (v[i])
 	{
-		if (!num_check(v, i))
-			return (0);
 		j = 0;
 		while (v[i][j])
 		{
-			if (v[i][j] >= '0' && v[i][j] <= '9')
+			if ((v[i][j] >= '0' && v[i][j] <= '9')
+			|| (v[i][j] == '-' && j == 0))
 				j++;
 			else
 			{
@@ -57,6 +60,8 @@ int	check_arguments(char **v, t_vars *vars)
 				return (0);
 			}
 		}
+		if (!num_check(v, i))
+			return (0);
 		i++;
 	}
 	varso(i, v, vars);

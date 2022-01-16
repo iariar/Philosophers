@@ -6,7 +6,7 @@
 /*   By: iariss <iariss@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 15:47:13 by iariss            #+#    #+#             */
-/*   Updated: 2021/06/17 09:41:15 by iariss           ###   ########.fr       */
+/*   Updated: 2021/07/26 10:43:53 by iariss           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct s_vars
 	sem_t			*fork2;
 	sem_t			*gnrl_lock;
 	sem_t			*death_lock;
-	sem_t			*dead_lock;
+	sem_t			*print_lock;
 	sem_t			*end_lock;
 	sem_t			*eating;
 	sem_t			*times_eat;

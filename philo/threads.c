@@ -6,7 +6,7 @@
 /*   By: iariss <iariss@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/14 12:09:53 by iariss            #+#    #+#             */
-/*   Updated: 2021/06/16 20:44:56 by iariss           ###   ########.fr       */
+/*   Updated: 2021/09/11 16:21:10 by iariss           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,18 @@ void	lock_print(char *s, t_costum *costum)
 {
 	int	diff;
 
-	pthread_mutex_lock(&costum->vars->dead_lock);
+	pthread_mutex_lock(&costum->vars->print_lock);
 	diff = currenttime() - costum->vars->start;
 	printf(s, diff, costum->index);
-	pthread_mutex_unlock(&costum->vars->dead_lock);
+	pthread_mutex_unlock(&costum->vars->print_lock);
 }
+
+// void	lock_print2(int index, t_costum *costum)
+// {
+// 	pthread_mutex_lock(&costum->vars->print_lock);
+// 	printf("index is >>>>>>>>>>> %d\n", index);
+// 	pthread_mutex_unlock(&costum->vars->print_lock);
+// }
 
 void	philo_life(t_costum *costum)
 {
@@ -44,8 +51,8 @@ void	philo_life(t_costum *costum)
 		pthread_mutex_lock(&costum->vars->eating);
 		costum->vars->eaten++;
 		pthread_mutex_unlock(&costum->vars->eating);
-		pthread_mutex_unlock(&costum->vars->fork[costum->right]);
 		pthread_mutex_unlock(&costum->vars->fork[costum->left]);
+		pthread_mutex_unlock(&costum->vars->fork[costum->right]);
 		lock_print("%ld philosopher %d is sleeping\n", costum);
 		usleep(costum->vars->time_to_sleep * 1000);
 		lock_print("%ld philosopher %d is thinking\n", costum);
@@ -61,8 +68,9 @@ void	*death_checker(void *var)
 	{
 		if (currenttime() > costum->time_limit)
 		{
-			pthread_mutex_lock(&costum->vars->dead_lock);
-			printf("%d died \n", costum->index);
+			pthread_mutex_lock(&costum->vars->print_lock);
+			printf("%ld philosopher %d died \n",
+				currenttime() - costum->vars->start, costum->index);
 			pthread_mutex_unlock(&costum->vars->gnrl_lock);
 			return (NULL);
 		}
@@ -70,8 +78,8 @@ void	*death_checker(void *var)
 			&& costum->vars->eaten >= costum->vars->num_times_eat
 			* costum->vars->num_of_philos)
 		{
-			pthread_mutex_lock(&costum->vars->dead_lock);
-			printf("end\n");
+			pthread_mutex_lock(&costum->vars->print_lock);
+			printf("End\n");
 			pthread_mutex_unlock(&costum->vars->gnrl_lock);
 		}
 		usleep(500);

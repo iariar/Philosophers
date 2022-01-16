@@ -6,7 +6,7 @@
 /*   By: iariss <iariss@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/14 12:05:45 by iariss            #+#    #+#             */
-/*   Updated: 2021/06/17 09:40:46 by iariss           ###   ########.fr       */
+/*   Updated: 2021/09/11 18:05:52 by iariss           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,15 +82,15 @@ void	close_kill(t_vars *vars, int **pid, t_costum *costum)
 	sem_wait(vars->gnrl_lock);
 	sem_close(vars->gnrl_lock);
 	sem_close(vars->fork);
-	sem_close(vars->dead_lock);
+	sem_close(vars->print_lock);
 	sem_close(vars->end_lock);
-	i = 1;
-	while (i <= vars->num_of_philos)
+	i = 0;
+	while (i < vars->num_of_philos)
 	{
 		kill((*pid)[i], SIGKILL);
 		i++;
 	}
-	free(pid);
+	free(*pid);
 	free(vars);
 	free(costum);
 }

@@ -6,7 +6,7 @@
 /*   By: iariss <iariss@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/14 12:05:45 by iariss            #+#    #+#             */
-/*   Updated: 2021/06/15 09:12:25 by iariss           ###   ########.fr       */
+/*   Updated: 2021/07/26 10:43:12 by iariss           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	print_msg_locked(char *s, t_costum *costum)
 {
-	pthread_mutex_lock(&costum->vars->dead_lock);
+	pthread_mutex_lock(&costum->vars->print_lock);
 	print_error(s);
-	pthread_mutex_unlock(&costum->vars->dead_lock);
+	pthread_mutex_unlock(&costum->vars->print_lock);
 }
 
 int	ft_atoi(const char *str)
